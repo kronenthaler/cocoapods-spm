@@ -74,6 +74,12 @@ module Pod
           { :kind => "branch", :branch => branch }
         elsif (revision = options.delete(:commit))
           { :kind => "revision", :revision => revision }
+        elsif (version = options.delete(:upToNextMajorVersion))
+          { :kind => "upToNextMajorVersion", :minimumVersion => version }
+        elsif (version = options.delete(:upToNextMinorVersion))
+          { :kind => "upToNextMinorVersion", :minimumVersion => version }
+        elsif (versions = options.delete(:range))
+          { :kind => "versionRange", :minimumVersion => versions[:minimumVersion], :maximumVersion => versions[:maximumVersion] }
         else
           raise "Missing requirement for SPM package: #{name}"
         end

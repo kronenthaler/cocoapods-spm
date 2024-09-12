@@ -26,6 +26,17 @@ module Pod
       def inspect
         "#<#{self.class} name=#{name} product=#{product} pkg=#{pkg}>"
       end
+
+      def mp_test_pckg?
+        [
+          'EntwineTest', 
+          'LocalizationTestExtensions', 
+          'TestExtensions', 
+          'SnapshotTestExtensions', 
+          'SnapshotTesting', 
+          'SnapshotTestingEx'
+        ].include?(product)
+      end
     end
   end
 end

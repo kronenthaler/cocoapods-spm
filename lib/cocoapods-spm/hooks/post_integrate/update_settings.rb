@@ -59,6 +59,9 @@ module Pod
 
         def linker_flags_for(target)
           spm_deps = @spm_analyzer.spm_dependencies_by_target[target.to_s].to_a
+          if !target.name.include?('Test')
+            spm_deps = spm_deps.reject(&:mp_test_pckg?)
+          end
           framework_flags = spm_deps.select(&:dynamic?).map { |d| "-framework \"#{d.product}\"" }
           library_flags = spm_deps.reject(&:dynamic?).map { |d| "-l\"#{d.product}.o\"" }
           framework_flags + library_flags

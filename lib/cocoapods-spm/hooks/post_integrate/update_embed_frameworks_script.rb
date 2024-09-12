@@ -22,6 +22,9 @@ module Pod
             @spm_analyzer
             .spm_dependencies_by_target
             .transform_values { |deps| deps.select(&:dynamic?) }
+          if !target.name.include?('Test')
+            @dynamic_deps_by_target[target.to_s] = @dynamic_deps_by_target[target.to_s].reject(&:mp_test_pckg?)
+          end
           @dynamic_deps_by_target[target.to_s].map do |d|
             "${BUILT_PRODUCTS_DIR}/PackageFrameworks/#{d.product}.framework"
           end

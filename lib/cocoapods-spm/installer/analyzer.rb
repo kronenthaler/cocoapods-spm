@@ -40,6 +40,7 @@ module Pod
           if !spec.name.include?('Test')
             @spm_dependencies_by_target[spec.name] = spec.spm_dependencies
           else
+            # Replace "/Tests" if it's at the end of the string
             @spm_dependencies_by_target[spec.name.sub(/\/Tests\z/, '-Unit-Tests')] = spec.spm_dependencies
           end
         end

@@ -37,13 +37,21 @@ module Pod
       def analyze_dependencies_for_targets
         specs = @aggregate_targets.flat_map(&:specs).uniq
         specs.each do |spec|
-          @spm_dependencies_by_target[spec.name] = spec.spm_dependencies
+          if !spec.name.include?('Test')
+            @spm_dependencies_by_target[spec.name] = spec.spm_dependencies
+          else
+            # Replace "/Tests" if it's at the end of the string
+            @spm_dependencies_by_target[spec.name.sub(/\/Tests\z/, '-Unit-Tests')] = spec.spm_dependencies
+          end
         end
       end
 
       def analyze_dependencies_for_aggregate_targets
         @aggregate_targets.each do |target|
           spm_dependencies = target.specs.flat_map(&:spm_dependencies)
+          if !target.name.include?('Test')
+            spm_dependencies = spm_dependencies.reject(&:mp_test_pckg?)
+          end
           @spm_dependencies_by_target[target.to_s] = merge_spm_dependencies(spm_dependencies)
         end
 

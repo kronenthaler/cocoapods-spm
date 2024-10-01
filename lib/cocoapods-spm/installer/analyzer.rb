@@ -48,6 +48,9 @@ module Pod
       def analyze_dependencies_for_aggregate_targets
         @aggregate_targets.each do |target|
           spm_dependencies = target.specs.flat_map(&:spm_dependencies)
+          if !target.name.include?('Test')
+            spm_dependencies = spm_dependencies.reject(&:mp_test_pckg?)
+          end
           @spm_dependencies_by_target[target.to_s] = merge_spm_dependencies(spm_dependencies)
         end
 
